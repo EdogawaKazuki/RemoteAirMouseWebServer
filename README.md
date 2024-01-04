@@ -1,18 +1,26 @@
-# Vue 3 + TypeScript + Vite
+# Remote Air Mouse Web Server
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This project uses Vue and Express and still in progress.
 
-## Recommended IDE Setup
+The '[deviceorientation](https://developer.mozilla.org/en-US/docs/Web/API/Device_orientation_events/Detecting_device_orientation)' event is used to get the device orientation. 
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[Websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) is used to communicate through the client and server.
 
-## Type Support For `.vue` Imports in TS
+[ROBOTJS](https://robotjs.io/) is used to simulate the input device on the srever.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+The code would be a mess because its still on proof of concept state.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+Only tested in Windows 11 + Android Edge.
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+# Execute
+
+## Compile front-end
+
+1. Change the websocket serverIP address in src/components/MoveMouse.vue
+2. npm run build
+3. Move the file in dist to server/public
+
+## Execute
+
+1. cd server
+2. npm start
