@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 
-const socket = new WebSocket('wss://192.168.2.115:3001/socket.io');
+const socket = new WebSocket('wss://192.168.50.107:3001/socket.io');
 const orientation = ref({
   alpha: 0, // Yaw
   beta: 0,  // Pitch
