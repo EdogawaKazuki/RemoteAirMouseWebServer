@@ -16,11 +16,12 @@ const cert = fs.readFileSync('./ssl/cert.pem');
 
 var credentials = {key: key, cert: cert};
 var httpsServer = https.createServer(credentials, app);
-// app.get('/', (req, res) => {
-//   var indexFile = path.join(__dirname, '../public/index.html')
-//   console.log(indexFile)
-//   res.sendFile(indexFile);
-// })
+var vertical_range = 45
+var horizontal_range = 45
+var screen_width = robot.getScreenSize().width
+var screen_height = robot.getScreenSize().height
+var screen_width_center = robot.getScreenSize().width / 2
+var screen_height_center = robot.getScreenSize().height / 2
 app.use(express.static('public'))
 var useHttps = true;
 if(useHttps){
@@ -39,12 +40,6 @@ app.ws('/socket.io', (ws, req) => {
   ws.on('message', (msg) => {
     // console.log('message from client: ', JSON.parse(msg));
     var data = JSON.parse(msg)
-    var vertical_range = 45
-    var horizontal_range = 45
-    var screen_width_center = robot.getScreenSize().width / 2
-    var screen_height_center = robot.getScreenSize().height / 2
-    var vertical_scale = robot.getScreenSize().height / vertical_range
-    var horizontal_scale = robot.getScreenSize().width / horizontal_range
 
     if (data.type === "orientation"){
       // console.log(data)
@@ -55,17 +50,26 @@ app.ws('/socket.io', (ws, req) => {
       var beta = data.data.beta
       console.log(alpha, beta)
       // console.log("Mouse before: ", mouse.x, mouse.y)
-      robot.moveMouse(screen_width_center - horizontal_scale * (alpha - orientation.alpha), 
-                      screen_height_center - vertical_scale * (beta - orientation.beta));
+      robot.moveMouse(screen_width_center - screen_width * (alpha - orientation.alpha) / horizontal_range, 
+                      screen_height_center - screen_height * (beta - orientation.beta) / vertical_range);
       mouse = robot.getMousePos();
       // console.log('mouse moved:', mouse.x, mouse.y)
+    }else if (data.type === "calibration"){
+      horizontal_range = data.data.controlAngleHorizontal
+      vertical_range = data.data.controlAngleVertical
+      console.log("Calibration data updated")
+      console.log("Horizontal range: ", horizontal_range)
+      console.log("Vertical range: ", vertical_range)
+    }else if(data.type === "reset"){
+      orientation = data.data.orientation
     }
-    else if (data.type === "calibration"){
-      orientation = data.data
-    }else if(data.type === "leftClick"){
+    else if(data.type === "leftClick"){
       robot.mouseClick()
     }else if(data.type === "rightClick"){
       robot.mouseClick("right")
+    }else if(data.type === "keyDown"){
+      console.log("keyDown: ", data)
+      robot.keyTap(data.data.key)
     }
 
     ws.send('hello from server');
